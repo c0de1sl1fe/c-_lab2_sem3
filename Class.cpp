@@ -89,14 +89,14 @@ bool BinaryImg<T>::operator==(const BinaryImg<T>& src) const
 
 
 template <class T>
-int BinaryImg<T>::operator!=(const BinaryImg<T>& src) const
+bool BinaryImg<T>::operator!=(const BinaryImg<T>& src) const
 {
     return !(*this == src);
 }
 
 
 template <class T>
-bool& BinaryImg<T>::operator()(int x, int y)
+T& BinaryImg<T>::operator()(int x, int y)
 {
     if ((x >= row || y >= col) || (x < 0 || y < 0)) 
     { 
@@ -107,7 +107,7 @@ bool& BinaryImg<T>::operator()(int x, int y)
 
 
 template <class T>
-bool BinaryImg<T>::operator()(int x, int y) const
+T BinaryImg<T>::operator()(int x, int y) const
 {
     if ((x >= row || y >= col) || (x < 0 || y < 0))
     {
