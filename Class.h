@@ -4,17 +4,18 @@
 #include <math.h>
 #include "Graphics.h"
 #define SCALE 10
+
 template <class T>
 class BinaryImg
 {
 private:
-    //bool** array;
     T** array;
     int row;
     int col;
     void DrawDot(float x, float y) const;
     void DrawBlankDot(float x, float y) const;
     Graphics* screen;
+    bool Cmp() const;
 
 public:
     BinaryImg(int x, int y);
@@ -45,10 +46,10 @@ public:
     T operator()(int x, int y) const;
     BinaryImg operator+(const BinaryImg<T>& src) const;
     BinaryImg operator*(const BinaryImg<T>& src) const;
-    BinaryImg operator+(T rhs) const; 
+    BinaryImg operator+(T rhs) const;
     BinaryImg operator*(T rhs) const;
     BinaryImg operator!();
-    BinaryImg& operator= (const BinaryImg & src);
+    BinaryImg& operator= (const BinaryImg& src);
     double AccumulationFactor() const;
     friend BinaryImg operator*(T rhs, const BinaryImg<T>& src)
     {
@@ -94,6 +95,7 @@ public:
 #include <iostream>
 #include "Graphics.h"
 #define SCALE 10
+
 template <class T>
 void BinaryImg<T>::DrawDot(float x, float y) const
 {
@@ -356,7 +358,11 @@ double BinaryImg<T>::AccumulationFactor() const
     return (double)k / ((double)row * (double)col);
 }
 
-
+template <class T>
+bool BinaryImg<T>::Cmp() const
+{
+    if (!)
+}
 //friend function
 //template <class T>
 //BinaryImg<T> operator+(T rhs, const BinaryImg<T>& src)

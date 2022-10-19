@@ -4,6 +4,8 @@
 #include "Class.h"
 #include <stdio.h>
 
+#include <typeinfo>
+
 
 
 //template <class T>
@@ -51,20 +53,20 @@ void DrawRectangle(int x1, int y1, int x2, int y2, BinaryImg<T>& src)
 
         for (int i = firstX; i <= secondX; i++)
         {
-            res(i, firstY) = true;
-            res(i, secondY) = true;
+            res(i, firstY) = 1;
+            res(i, secondY) = 1;
         }
 
         for (int i = firstY; i <= secondY; i++)
         {
-            res(firstX, i) = true;
-            res(secondX, i) = true;
+            res(firstX, i) = 1;
+            res(secondX, i) = 1;
         }
 
         src = res;
         return;
     }
-    
+
     int firstX = x1, secondX = x2, firstY = y1, secondY = y2;
 
     for (int i = firstX; i <= secondX; i++)
@@ -94,7 +96,8 @@ void printMenu1()
 {
     system("cls");
     std::cout << "1. Fill the img" << std::endl;
-    std::cout << "2. Exit" << std::endl;
+    std::cout << "2. Read the element" << std::endl;
+    std::cout << "3. Exit" << std::endl;
     std::cout << "choice: ";
 }
 
@@ -164,6 +167,26 @@ int main()
 
                         break;
                     case(2):
+                        try
+                        {
+                            int x, y;
+                            bool tmp = false;
+                            std::cout << "Enter coordinates of element: " << std::endl;
+                            std::cout << "enter x: ";
+                            std::cin >> x;
+                            std::cout << "enter y: ";
+                            std::cin >> y;
+
+                            tmp = example(x, y);
+                            std::cout << tmp;
+                        }
+                        catch (EClassException& err)
+                        {
+                            err.Print();
+                        }
+
+                        break;
+                    case(3):
                         exit1 = true;
                         break;
                     default:
@@ -195,51 +218,346 @@ int main()
                     one += 2;
                     two -= 2;
                 }
-                std::cout << a; 
+                std::cout << a;
                 system("pause");
             }
-            catch (EClassException &err)
+            catch (EClassException& err)
             {
                 err.Print();
             }
             break;
         case(3):
-            bool exit3 = false;
+        {
             int choice3 = 0;
-
+            bool exit3 = false;
             while (!exit3)
             {
-                std::cout << "Enter";
+                printMenu2();
                 std::cin >> choice3;
                 switch (choice3)
                 {
-                case(1):
+                case(1)://bool
+                    std::cout << "Enter dimenstion of your rectangle:" << std::endl;
+                    try
+                    {
+                        std::cout << "Enter row: ";
+                        std::cin >> row;
+                        std::cout << "Enter col: ";
+                        std::cin >> col;
+
+                        BinaryImg<bool> example(row, col);
+                        std::cout << example;
+                        system("pause");
+                        bool exit1 = false;
+                        int choice1 = 0;
+                        while (!exit1)
+                        {
+                            printMenu1();
+                            std::cin >> choice1;
+                            switch (choice1)
+                            {
+                            case(1):
+                                try
+                                {
+                                    int x, y;
+                                    bool tmp = false;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
+                                    std::cout << "Enter value: ";
+                                    std::cin >> tmp;
+
+                                    example(x, y) = tmp;
+                                    std::cout << example;
+
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+                                break;
+                            case(2):
+                                try
+                                {
+                                    int x, y;
+                                    bool tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
 
 
+                                    tmp = example(x, y);
+                                    std::cout << "Type: " << typeid(tmp).name() << " Value: " << tmp << std::endl;
+                                    system("pause");
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+                                break;
+                            case(3):
+                                exit1 = true;
+                                break;
+                            default:
+                                std::cout << "Error";
+                                break;
+                            }
+                        }
+                    }
+                    catch (EClassException& err)
+                    {
+                        err.Print();
+                    }
                     break;
+                case(2)://char
+                    std::cout << "Enter dimenstion of your rectangle:" << std::endl;
+                    try
+                    {
+                        std::cout << "Enter row: ";
+                        std::cin >> row;
+                        std::cout << "Enter col: ";
+                        std::cin >> col;
 
-                case(2):
+                        BinaryImg<char> example(row, col);
+                        std::cout << example;
+                        system("pause");
+                        bool exit1 = false;
+                        int choice1 = 0;
+                        while (!exit1)
+                        {
+                            printMenu1();
+                            std::cin >> choice1;
+                            switch (choice1)
+                            {
+                            case(1):
+                                try
+                                {
+                                    int x, y;
+                                    char tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
+                                    std::cout << "Enter value: ";
+                                    std::cin >> tmp;
+
+                                    example(x, y) = tmp;
+                                    std::cout << example;
+
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+
+                                break;
+                            case(2):
+                                try
+                                {
+                                    int x, y;
+                                    char tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
 
 
+                                    tmp = example(x, y);
+                                    std::cout << "Type: " << typeid(tmp).name() << " Value: " << tmp << std::endl;
+                                    system("pause");
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+                                break;
+                            case(3):
+                                exit1 = true;
+                                break;
+                            default:
+                                std::cout << "Error";
+                                break;
+                            }
+                        }
+                    }
+                    catch (EClassException& err)
+                    {
+                        err.Print();
+                    }
                     break;
+                case(3)://short
+                    std::cout << "Enter dimenstion of your rectangle:" << std::endl;
+                    try
+                    {
+                        std::cout << "Enter row: ";
+                        std::cin >> row;
+                        std::cout << "Enter col: ";
+                        std::cin >> col;
 
-                case(3):
+                        BinaryImg<short> example(row, col);
+                        std::cout << example;
+                        system("pause");
+                        bool exit1 = false;
+                        int choice1 = 0;
+                        while (!exit1)
+                        {
+                            printMenu1();
+                            std::cin >> choice1;
+                            switch (choice1)
+                            {
+                            case(1):
+                                try
+                                {
+                                    int x, y;
+                                    short tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
+                                    std::cout << "Enter value: ";
+                                    std::cin >> tmp;
+
+                                    example(x, y) = tmp;
+                                    std::cout << example;
+
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+                                break;
+                            case(2):
+                                try
+                                {
+                                    int x, y;
+                                    short tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
 
 
+                                    tmp = example(x, y);
+                                    std::cout << "Type: " << typeid(tmp).name() << " Value: " << tmp << std::endl;
+                                    system("pause");
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+
+                                break;
+                            case(3):
+                                exit1 = true;
+                                break;
+                            default:
+                                std::cout << "Error";
+                                break;
+                            }
+                        }
+                    }
+                    catch (EClassException& err)
+                    {
+                        err.Print();
+                    }
                     break;
+                case(4)://float
+                    std::cout << "Enter dimenstion of your rectangle:" << std::endl;
+                    try
+                    {
+                        std::cout << "Enter row: ";
+                        std::cin >> row;
+                        std::cout << "Enter col: ";
+                        std::cin >> col;
 
-                case(4):
+                        BinaryImg<float> example(row, col);
+                        std::cout << example;
+                        system("pause");
+                        bool exit1 = false;
+                        int choice1 = 0;
+                        while (!exit1)
+                        {
+                            printMenu1();
+                            std::cin >> choice1;
+                            switch (choice1)
+                            {
+                            case(1):
+                                try
+                                {
+                                    int x, y;
+                                    float tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
+                                    std::cout << "Enter value: ";
+                                    std::cin >> tmp;
+
+                                    example(x, y) = tmp;
+                                    std::cout << example;
+
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+
+                                break;
+                            case(2):
+                                try
+                                {
+                                    int x, y;
+                                    float tmp = 0;
+                                    std::cout << "Enter coordinates of element: " << std::endl;
+                                    std::cout << "enter x: ";
+                                    std::cin >> x;
+                                    std::cout << "enter y: ";
+                                    std::cin >> y;
 
 
+                                    tmp = example(x, y);
+                                    std::cout << "Type: " << typeid(tmp).name() << " Value: " << tmp << std::endl;
+                                    system("pause");
+                                }
+                                catch (EClassException& err)
+                                {
+                                    err.Print();
+                                }
+                                break;
+
+                            case(3):
+                                exit1 = true;
+                                break;
+                            default:
+                                std::cout << "Error";
+                                break;
+                            }
+                        }
+                    }
+                    catch (EClassException& err)
+                    {
+                        err.Print();
+                    }
                     break;
                 case(5):
+
                     exit3 = true;
                     break;
                 default:
+                    std::cout << "Error";
                     break;
                 }
             }
-            break;
+        }
         case(4):
             exit = true;
             break;
@@ -254,251 +572,5 @@ int main()
 }
 
 
-//int choice3 = 0;
-//bool exit3 = false;
-//while (!exit3)
-//{
-//    printMenu2();
-//    std::cin >> choice3;
-//    switch (choice3)
-//    {
-//    case(1)://bool
-//        std::cout << "Enter dimenstion of your rectangle:" << std::endl;
-//        try
-//        {
-//            std::cout << "Enter row: ";
-//            std::cin >> row;
-//            std::cout << "Enter col: ";
-//            std::cin >> col;
-//
-//            BinaryImg<bool> example(row, col);
-//            std::cout << example;
-//            system("pause");
-//            std::cout << example;
-//            system("pause");
-//            bool exit1 = false;
-//            int choice1 = 0;
-//            while (!exit1)
-//            {
-//                printMenu1();
-//                std::cin >> choice1;
-//                switch (choice1)
-//                {
-//                case(1):
-//                    try
-//                    {
-//                        int x, y;
-//                        bool tmp = false;
-//                        std::cout << "Enter coordinates of element: " << std::endl;
-//                        std::cout << "enter x: ";
-//                        std::cin >> x;
-//                        std::cout << "enter y: ";
-//                        std::cin >> y;
-//                        std::cout << "Enter value: ";
-//                        std::cin >> tmp;
-//
-//                        example(x, y) = tmp;
-//                        std::cout << example;
-//
-//                    }
-//                    catch (EClassException& err)
-//                    {
-//                        err.Print();
-//                    }
-//
-//                    break;
-//                case(2):
-//                    exit1 = true;
-//                    break;
-//                default:
-//                    std::cout << "Error";
-//                    break;
-//                }
-//            }
-//        }
-//        catch (EClassException& err)
-//        {
-//            err.Print();
-//        }
-//        break;
-//    case(2)://char
-//        std::cout << "Enter dimenstion of your rectangle:" << std::endl;
-//        try
-//        {
-//            std::cout << "Enter row: ";
-//            std::cin >> row;
-//            std::cout << "Enter col: ";
-//            std::cin >> col;
-//
-//            BinaryImg<char> example(row, col);
-//            std::cout << example;
-//            system("pause");
-//            bool exit1 = false;
-//            int choice1 = 0;
-//            while (!exit1)
-//            {
-//                printMenu1();
-//                std::cin >> choice1;
-//                switch (choice1)
-//                {
-//                case(1):
-//                    try
-//                    {
-//                        int x, y;
-//                        char tmp = 0;
-//                        std::cout << "Enter coordinates of element: " << std::endl;
-//                        std::cout << "enter x: ";
-//                        std::cin >> x;
-//                        std::cout << "enter y: ";
-//                        std::cin >> y;
-//                        std::cout << "Enter value: ";
-//                        std::cin >> tmp;
-//
-//                        example(x, y) = tmp;
-//                        std::cout << example;
-//
-//                    }
-//                    catch (EClassException& err)
-//                    {
-//                        err.Print();
-//                    }
-//
-//                    break;
-//                case(2):
-//                    exit1 = true;
-//                    break;
-//                default:
-//                    std::cout << "Error";
-//                    break;
-//                }
-//            }
-//        }
-//        catch (EClassException& err)
-//        {
-//            err.Print();
-//        }
-//        break;
-//    case(3)://short
-//        std::cout << "Enter dimenstion of your rectangle:" << std::endl;
-//        try
-//        {
-//            std::cout << "Enter row: ";
-//            std::cin >> row;
-//            std::cout << "Enter col: ";
-//            std::cin >> col;
-//
-//            BinaryImg<short> example(row, col);
-//            std::cout << example;
-//            system("pause");
-//            bool exit1 = false;
-//            int choice1 = 0;
-//            while (!exit1)
-//            {
-//                printMenu1();
-//                std::cin >> choice1;
-//                switch (choice1)
-//                {
-//                case(1):
-//                    try
-//                    {
-//                        int x, y;
-//                        short tmp = 0;
-//                        std::cout << "Enter coordinates of element: " << std::endl;
-//                        std::cout << "enter x: ";
-//                        std::cin >> x;
-//                        std::cout << "enter y: ";
-//                        std::cin >> y;
-//                        std::cout << "Enter value: ";
-//                        std::cin >> tmp;
-//
-//                        example(x, y) = tmp;
-//                        std::cout << example;
-//
-//                    }
-//                    catch (EClassException& err)
-//                    {
-//                        err.Print();
-//                    }
-//
-//                    break;
-//                case(2):
-//                    exit1 = true;
-//                    break;
-//                default:
-//                    std::cout << "Error";
-//                    break;
-//                }
-//            }
-//        }
-//        catch (EClassException& err)
-//        {
-//            err.Print();
-//        }
-//        break;
-//    case(4)://float
-//        std::cout << "Enter dimenstion of your rectangle:" << std::endl;
-//        try
-//        {
-//            std::cout << "Enter row: ";
-//            std::cin >> row;
-//            std::cout << "Enter col: ";
-//            std::cin >> col;
-//
-//            BinaryImg<float> example(row, col);
-//            std::cout << example;
-//            system("pause");
-//            bool exit1 = false;
-//            int choice1 = 0;
-//            while (!exit1)
-//            {
-//                printMenu1();
-//                std::cin >> choice1;
-//                switch (choice1)
-//                {
-//                case(1):
-//                    try
-//                    {
-//                        int x, y;
-//                        float tmp = 0;
-//                        std::cout << "Enter coordinates of element: " << std::endl;
-//                        std::cout << "enter x: ";
-//                        std::cin >> x;
-//                        std::cout << "enter y: ";
-//                        std::cin >> y;
-//                        std::cout << "Enter value: ";
-//                        std::cin >> tmp;
-//
-//                        example(x, y) = tmp;
-//                        std::cout << example;
-//
-//                    }
-//                    catch (EClassException& err)
-//                    {
-//                        err.Print();
-//                    }
-//
-//                    break;
-//                case(2):
-//                    exit1 = true;
-//                    break;
-//                default:
-//                    std::cout << "Error";
-//                    break;
-//                }
-//            }
-//        }
-//        catch (EClassException& err)
-//        {
-//            err.Print();
-//        }
-//        break;
-//    case(5):
-//
-//        exit3 = true;
-//        break;
-//    default:
-//        std::cout << "Error";
-//        break;
-//    }
-//}
+
 
