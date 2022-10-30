@@ -3,6 +3,11 @@
 #include "Graphics.h"
 #include <math.h>
 #include "Graphics.h"
+
+#include <string>
+#include <typeinfo>
+
+#include <limits>
 #define SCALE 10
 
 template <class T>
@@ -15,8 +20,11 @@ private:
     void DrawDot(float x, float y) const;
     void DrawBlankDot(float x, float y) const;
     Graphics* screen;
-    bool Cmp() const;
-
+    void Print();
+    BinaryImg<T> And(T rhs);
+    BinaryImg<T> Or(T rhs);
+    BinaryImg<T> And(BinaryImg<T>& rhs);
+    BinaryImg<T> Or(BinaryImg<T>& rhs);
 public:
     BinaryImg(int x, int y);
     BinaryImg(const BinaryImg& src);
@@ -24,19 +32,9 @@ public:
     int GetRow() const;
     int GetCol() const;
 
-    //test prints 
-
     friend std::ostream& operator<<(std::ostream& os, BinaryImg<T>& obj)
     {
-        obj.screen = new Graphics((obj.row * SCALE) + SCALE * 12, (obj.col * SCALE) + SCALE * 12);
-        for (int i = 0; i < obj.row; i++)
-        {
-            for (int j = 0; j < obj.col; j++)
-            {
-                obj.array[i][j] ? obj.DrawDot((float)(i * SCALE), (float)(j * SCALE)) : obj.DrawBlankDot((float)(i * SCALE), (float)(j * SCALE));
-            }
-        }
-        delete obj.screen;
+        obj.Print();
         return os;
     }
 
@@ -53,28 +51,30 @@ public:
     double AccumulationFactor() const;
     friend BinaryImg operator*(T rhs, const BinaryImg<T>& src)
     {
-        BinaryImg<T> result(src.row, src.col);
-        for (int i = 0; i < src.row; i++)
-        {
-            for (int j = 0; j < src.col; j++)
-            {
-                result.array[i][j] = src.array[i][j] * rhs;
-            }
-        }
-        return result;
+        //BinaryImg<T> result(src.row, src.col);
+        //for (int i = 0; i < src.row; i++)
+        //{
+        //    for (int j = 0; j < src.col; j++)
+        //    {
+        //        result.array[i][j] = src.array[i][j] * rhs;
+        //    }
+        //}
+        //return result;
+        return And(rhs);
     }
 
     friend BinaryImg operator+(T rhs, const BinaryImg<T>& src)
     {
-        BinaryImg result(src.row, src.col);
-        for (int i = 0; i < src.row; i++)
-        {
-            for (int j = 0; j < src.col; j++)
-            {
-                result.array[i][j] = src.array[i][j] + rhs;
-            }
-        }
-        return result;
+        //BinaryImg result(src.row, src.col);
+        //for (int i = 0; i < src.row; i++)
+        //{
+        //    for (int j = 0; j < src.col; j++)
+        //    {
+        //        result.array[i][j] = src.array[i][j] + rhs;
+        //    }
+        //}
+        //return result;
+        return Or(rhs);
     }
 };
 
@@ -125,6 +125,28 @@ BinaryImg<T>::BinaryImg(int x, int y)
     }
 }
 
+// Specialization for char
+template <> 
+BinaryImg<char>::BinaryImg(int x, int y)
+{
+    screen = NULL;
+    if (x <= 0 || y <= 0) { throw EClassException("invalid dimension"); }
+    row = x;
+    col = y;
+    array = new char * [row];
+    for (int i = 0; i < row; i++)
+    {
+        array[i] = new char[col];
+    }
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            array[i][j] = '0';
+        }
+    }
+}
+
 
 template <class T>
 BinaryImg<T>::BinaryImg(const BinaryImg& src)
@@ -163,7 +185,6 @@ template <class T>
 int BinaryImg<T>::GetRow() const { return row; }
 template <class T>
 int BinaryImg<T>::GetCol() const { return col; }
-
 
 
 template <class T>
@@ -213,62 +234,66 @@ T BinaryImg<T>::operator()(int x, int y) const
 template <class T>
 BinaryImg<T> BinaryImg<T>::operator+(const BinaryImg<T>& src) const
 {
-    if (row != src.row || col != src.col) { throw EClassException("Invalid dimensions of imgs"); }
-    BinaryImg<T> result(row, col);
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            result.array[i][j] = array[i][j] + src.array[i][j];
-        }
-    }
-    return result;
+    //if (row != src.row || col != src.col) { throw EClassException("Invalid dimensions of imgs"); }
+    //BinaryImg<T> result(row, col);
+    //for (int i = 0; i < row; i++)
+    //{
+    //    for (int j = 0; j < col; j++)
+    //    {
+    //        result.array[i][j] = array[i][j] + src.array[i][j];
+    //    }
+    //}
+    //return result;
+    return Or(src);
 }
 
 
 template <class T>
 BinaryImg<T> BinaryImg<T>::operator*(const BinaryImg<T>& src) const
 {
-    if (row != src.row || col != src.col) { throw EClassException("Invalid dimensions of imgs"); }
-    BinaryImg<T> result(row, col);
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            result.array[i][j] = array[i][j] * src.array[i][j];
-        }
-    }
-    return result;
+    //if (row != src.row || col != src.col) { throw EClassException("Invalid dimensions of imgs"); }
+    //BinaryImg<T> result(row, col);
+    //for (int i = 0; i < row; i++)
+    //{
+    //    for (int j = 0; j < col; j++)
+    //    {
+    //        result.array[i][j] = array[i][j] * src.array[i][j];
+    //    }
+    //}
+    //return result;
+    return And(src);
 }
 
 
 template <class T>
 BinaryImg<T> BinaryImg<T>::operator+(T rhs) const
 {
-    BinaryImg<T> result(row, col);
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            result.array[i][j] = array[i][j] + rhs;
-        }
-    }
-    return result;
+    //BinaryImg<T> result(row, col);
+    //for (int i = 0; i < row; i++)
+    //{
+    //    for (int j = 0; j < col; j++)
+    //    {
+    //        result.array[i][j] = array[i][j] + rhs;
+    //    }
+    //}
+    //return result;
+    return And(rhs);
 }
 
 
 template <class T>
 BinaryImg<T> BinaryImg<T>::operator*(T rhs) const
 {
-    BinaryImg result(row, col);
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            result.array[i][j] = array[i][j] * rhs;
-        }
-    }
-    return result;
+    //BinaryImg result(row, col);
+    //for (int i = 0; i < row; i++)
+    //{
+    //    for (int j = 0; j < col; j++)
+    //    {
+    //        result.array[i][j] = array[i][j] * rhs;
+    //    }
+    //}
+    //return result;
+    return Or(rhs);
 }
 
 
@@ -358,11 +383,130 @@ double BinaryImg<T>::AccumulationFactor() const
     return (double)k / ((double)row * (double)col);
 }
 
+
 template <class T>
-bool BinaryImg<T>::Cmp() const
+void BinaryImg<T>::Print() 
 {
-    if (!)
+
+    screen = new Graphics((row * SCALE) + SCALE * 12, (col * SCALE) + SCALE * 12);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            array[i][j] ? DrawDot((float)(i * SCALE), (float)(j * SCALE)) : DrawBlankDot((float)(i * SCALE), (float)(j * SCALE));
+        }
+    }
+    delete screen;
 }
+
+
+// Specialization for char
+template <>
+void BinaryImg<char>::Print() 
+{
+    screen = new Graphics((row * SCALE) + SCALE * 12, (col * SCALE) + SCALE * 12);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            //array[i][j] ? DrawDot((float)(i * SCALE), (float)(j * SCALE)) : DrawBlankDot((float)(i * SCALE), (float)(j * SCALE));
+            array[i][j] != '0' ? DrawDot((float)(i * SCALE), (float)(j * SCALE)) : DrawBlankDot((float)(i * SCALE), (float)(j * SCALE));
+        }
+    }
+    delete screen;
+}
+
+
+template <class T>
+BinaryImg<T> BinaryImg<T>::And(T src)
+{
+    BinaryImg<T> result(row, col);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            if ((double)array[i][j] * src > numeric_limits<T>::max() || (double)array[i][j] * src < numeric_limits<T>::min())
+            {
+                result.array[i][j] = 0;
+            }
+            else
+            {
+                result.array[i][j] = array[i][j] * src;
+            }
+        }
+    }
+    return result;
+}
+
+
+template <class T>
+BinaryImg<T> BinaryImg<T>::Or(T src)
+{
+    BinaryImg<T> result(row, col);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            if ((double)array[i][j] + src > numeric_limits<T>::max() || (double)array[i][j] + src < numeric_limits<T>::min())
+            {
+                result.array[i][j] = 0;
+            }
+            else
+            {
+                result.array[i][j] = array[i][j] + src;
+            }
+        }
+    }
+    return result;
+}
+
+
+template <class T>
+BinaryImg<T> BinaryImg<T>::And(BinaryImg<T>& rhs)
+{
+    if (row != rhs.row || col != rhs.col) { throw EClassException("Invalid dimensions of imgs"); }
+    BinaryImg<T> result(row, col);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+
+            if ((double)array[i][j] * rhs.array[i][j] > numeric_limits<T>::max() || (double)array[i][j] * rhs.array[i][j] < numeric_limits<T>::min())
+            {
+                result.array[i][j] = 0;
+            }
+            else
+            {
+                result.array[i][j] = array[i][j] * rhs.array[i][j];
+            }
+        }
+    }
+    return result;
+}
+
+
+template <class T>
+BinaryImg<T> BinaryImg<T>::Or(BinaryImg<T>& rhs)
+{
+    if (row != rhs.row || col != rhs.col) { throw EClassException("Invalid dimensions of imgs"); }
+    BinaryImg<T> result(row, col);
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            if ((double)array[i][j] + rhs.array[i][j] > numeric_limits<T>::max() || (double)array[i][j] + rhs.array[i][j] < numeric_limits<T>::min())
+            {
+                result.array[i][j] = 0;
+            }
+            else
+            {
+                result.array[i][j] = array[i][j] + rhs.array[i][j];
+            }
+        }
+    }
+    return result;
+}
+
 //friend function
 //template <class T>
 //BinaryImg<T> operator+(T rhs, const BinaryImg<T>& src)
