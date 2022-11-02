@@ -314,7 +314,37 @@ BinaryImg<T> BinaryImg<T>::operator!()
     {
         for (int j = 0; j < col; j++)
         {
-            array[i][j] = !array[i][j];
+            // дописать numrec_type
+            if (array[i][j] == 0)
+            {
+                array[i][j] = std::numeric_limits<T>::max();
+            }
+            else
+            {
+                array[i][j] = 0;
+            }
+        }
+    }
+    return *this;
+}
+
+
+template <>
+BinaryImg<char> BinaryImg<char>::operator!()
+{
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            // дописать numrec_type
+            if (array[i][j] == '0')
+            {
+                array[i][j] = std::numeric_limits<char>::max();
+            }
+            else
+            {
+                array[i][j] = '0';
+            }
         }
     }
     return *this;
@@ -392,6 +422,21 @@ double BinaryImg<T>::AccumulationFactor() const
     }
     return (double)k / ((double)row * (double)col);
 }
+
+template <>
+double BinaryImg<char>::AccumulationFactor() const
+{
+    int k = 0;
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            if (array[i][j] != '0') { k++; }
+        }
+    }
+    return (double)k / ((double)row * (double)col);
+}
+
 
 
 template <class T>

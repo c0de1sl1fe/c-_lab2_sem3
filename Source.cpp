@@ -33,7 +33,48 @@
 //
 //    return res;
 //}
-
+int EnterNumber()
+{
+    double tmp;
+    char stmp[24];
+    bool exit1 = false;
+    while (!exit1)
+    {
+        bool exit = true;
+        gets_s(stmp);
+        char* endptr = stmp;
+        tmp = strtod(stmp, &endptr);
+        if (endptr == stmp)
+        {
+            exit = false;
+            continue;
+        }
+        if ((tmp == DBL_MAX || tmp == DBL_MIN) && errno == ERANGE)
+        {
+            exit = false;
+            continue;
+        }
+        while (*endptr)
+        {
+            if ((*endptr != ' ') && (*endptr != '\n'))
+            {
+                exit = false;
+                break;
+            }
+            endptr++;
+        }
+        if (exit)
+        {
+            exit1 = true;
+        }
+        else
+        {
+            exit1 = false;
+            printf("\nsomething wrong with number\n");
+        }
+    }
+    return (int)tmp;
+}
 
 template <class T>
 void DrawRectangle(int x1, int y1, int x2, int y2, BinaryImg<T>& src)
@@ -137,7 +178,8 @@ int main()
     while (!exit)
     {
         printMenu();
-        std::cin >> choice;
+        //std::cin >> choice;
+        choice = EnterNumber();
         switch (choice)
         {
         case(1):
@@ -157,7 +199,8 @@ int main()
                 while (!exit1)
                 {
                     printMenu1();
-                    std::cin >> choice1;
+                    //std::cin >> choice1;
+                    choice1 = EnterNumber();
                     switch (choice1)
                     {
                     case(1):
@@ -250,7 +293,8 @@ int main()
             while (!exit3)
             {
                 printMenu2();
-                std::cin >> choice3;
+                //std::cin >> choice3;
+                choice3 = EnterNumber();
                 switch (choice3)
                 {
                 case(1)://bool
@@ -270,7 +314,8 @@ int main()
                         while (!exit1)
                         {
                             printMenu1();
-                            std::cin >> choice1;
+                            //std::cin >> choice1;
+                            choice1 = EnterNumber();
                             switch (choice1)
                             {
                             case(1):
@@ -352,7 +397,8 @@ int main()
                         while (!exit1)
                         {
                             printMenu1();
-                            std::cin >> choice1;
+                            //std::cin >> choice1;
+                            choice1 = EnterNumber();
                             switch (choice1)
                             {
                             case(1):
@@ -430,7 +476,8 @@ int main()
                         while (!exit1)
                         {
                             printMenu1();
-                            std::cin >> choice1;
+                            //std::cin >> choice1;
+                            choice1 = EnterNumber();
                             switch (choice1)
                             {
                             case(1):
@@ -513,7 +560,8 @@ int main()
                         while (!exit1)
                         {
                             printMenu1();
-                            std::cin >> choice1;
+                            //std::cin >> choice1;
+                            choice1 = EnterNumber();
                             switch (choice1)
                             {
                             case(1):
