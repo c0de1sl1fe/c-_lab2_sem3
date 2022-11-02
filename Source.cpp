@@ -1,10 +1,9 @@
-
 #include <iostream>
 #include "Graphics.h"
 #include "Class.h"
 #include <stdio.h>
 
-#include <typeinfo>
+//#include <typeinfo>
 
 
 
@@ -108,9 +107,27 @@ void printMenu2()
     std::cout << "2. Char" << std::endl;
     std::cout << "3. Short" << std::endl;
     std::cout << "4. Float" << std::endl;
-    std::cout << "5. Exit" << std::endl;
+    std::cout << "5. Show the overflow control" << std::endl;
+    std::cout << "6. Exit" << std::endl;
+
     std::cout << "choice: ";
 }
+
+void showTheOverflow()
+{
+    BinaryImg<bool> a(10, 10);
+    BinaryImg<bool> b(10, 10);
+    BinaryImg<bool> c(10, 10);
+    a(0, 0) = true;
+    std::cout << a;
+    
+    b(0, 0) = true;
+    std::cout << b;
+    c = a + b;
+    std::cout << c;
+    system("pause");
+}
+
 int main()
 {
 
@@ -260,7 +277,8 @@ int main()
                                 try
                                 {
                                     int x, y;
-                                    bool tmp = false;
+                                    //bool tmp = false;
+                                    double tmp = 0;
                                     std::cout << "Enter coordinates of element: " << std::endl;
                                     std::cout << "enter x: ";
                                     std::cin >> x;
@@ -268,7 +286,10 @@ int main()
                                     std::cin >> y;
                                     std::cout << "Enter value: ";
                                     std::cin >> tmp;
-
+                                    if (tmp> std::numeric_limits<bool>::max() || tmp < std::numeric_limits<bool>::min())
+                                    {
+                                        throw EClassException("Out of range of bool type");
+                                    }
                                     example(x, y) = tmp;
                                     std::cout << example;
 
@@ -276,6 +297,7 @@ int main()
                                 catch (EClassException& err)
                                 {
                                     err.Print();
+                                    system("pause");
                                 }
                                 break;
                             case(2):
@@ -415,7 +437,8 @@ int main()
                                 try
                                 {
                                     int x, y;
-                                    short tmp = 0;
+                                    //short tmp = 0;
+                                    double tmp = 0;
                                     std::cout << "Enter coordinates of element: " << std::endl;
                                     std::cout << "enter x: ";
                                     std::cin >> x;
@@ -423,14 +446,18 @@ int main()
                                     std::cin >> y;
                                     std::cout << "Enter value: ";
                                     std::cin >> tmp;
-
-                                    example(x, y) = tmp;
+                                    if (tmp > std::numeric_limits<short>::max() || tmp < std::numeric_limits<short>::min())
+                                    {
+                                        throw EClassException("Out of range of short type");
+                                    }
+                                    example(x, y) = (short)tmp;
                                     std::cout << example;
 
                                 }
                                 catch (EClassException& err)
                                 {
                                     err.Print();
+                                    system("pause");
                                 }
                                 break;
                             case(2):
@@ -493,7 +520,8 @@ int main()
                                 try
                                 {
                                     int x, y;
-                                    float tmp = 0;
+                                    //float tmp = 0;
+                                    double tmp = 0;
                                     std::cout << "Enter coordinates of element: " << std::endl;
                                     std::cout << "enter x: ";
                                     std::cin >> x;
@@ -501,14 +529,18 @@ int main()
                                     std::cin >> y;
                                     std::cout << "Enter value: ";
                                     std::cin >> tmp;
-
-                                    example(x, y) = tmp;
+                                    if (tmp > std::numeric_limits<float>::max() || tmp < std::numeric_limits<float>::min())
+                                    {
+                                        throw EClassException("Out of range of float type");
+                                    }
+                                    example(x, y) = (float)tmp;
                                     std::cout << example;
 
                                 }
                                 catch (EClassException& err)
                                 {
                                     err.Print();
+                                    system("pause");
                                 }
 
                                 break;
@@ -549,7 +581,9 @@ int main()
                     }
                     break;
                 case(5):
-
+                    showTheOverflow();
+                    break;
+                case(6):
                     exit3 = true;
                     break;
                 default:

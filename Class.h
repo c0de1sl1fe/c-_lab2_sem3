@@ -21,10 +21,12 @@ private:
     void DrawBlankDot(float x, float y) const;
     Graphics* screen;
     void Print();
-    BinaryImg<T> And(T rhs);
-    BinaryImg<T> Or(T rhs);
-    BinaryImg<T> And(BinaryImg<T>& rhs);
-    BinaryImg<T> Or(BinaryImg<T>& rhs);
+    BinaryImg<T> And(T rhs) const;
+    BinaryImg<T> Or(T rhs) const;
+    BinaryImg<T> And(const BinaryImg<T>& rhs) const;
+    BinaryImg<T> Or(const BinaryImg<T>& rhs) const;
+
+
 public:
     BinaryImg(int x, int y);
     BinaryImg(const BinaryImg& src);
@@ -44,12 +46,13 @@ public:
     T operator()(int x, int y) const;
     BinaryImg operator+(const BinaryImg<T>& src) const;
     BinaryImg operator*(const BinaryImg<T>& src) const;
-    BinaryImg operator+(T rhs) const;
-    BinaryImg operator*(T rhs) const;
+    BinaryImg operator+(T src) const;
+    BinaryImg operator*(T src) const;
     BinaryImg operator!();
     BinaryImg& operator= (const BinaryImg& src);
     double AccumulationFactor() const;
-    friend BinaryImg operator*(T rhs, const BinaryImg<T>& src)
+
+    friend BinaryImg operator*(T rhs, /*const*/ BinaryImg<T>& src)
     {
         //BinaryImg<T> result(src.row, src.col);
         //for (int i = 0; i < src.row; i++)
@@ -60,10 +63,12 @@ public:
         //    }
         //}
         //return result;
-        return And(rhs);
+
+        return src.And(rhs);
+
     }
 
-    friend BinaryImg operator+(T rhs, const BinaryImg<T>& src)
+    friend BinaryImg operator+(T rhs, /*const*/ BinaryImg<T>& src)
     {
         //BinaryImg result(src.row, src.col);
         //for (int i = 0; i < src.row; i++)
@@ -74,7 +79,7 @@ public:
         //    }
         //}
         //return result;
-        return Or(rhs);
+        return src.Or(rhs);
     }
 };
 
@@ -244,7 +249,8 @@ BinaryImg<T> BinaryImg<T>::operator+(const BinaryImg<T>& src) const
     //    }
     //}
     //return result;
-    return Or(src);
+    return this->Or(src);
+
 }
 
 
@@ -261,12 +267,14 @@ BinaryImg<T> BinaryImg<T>::operator*(const BinaryImg<T>& src) const
     //    }
     //}
     //return result;
-    return And(src);
+
+    return this->And(src);
+
 }
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::operator+(T rhs) const
+BinaryImg<T> BinaryImg<T>::operator+(T src) const
 {
     //BinaryImg<T> result(row, col);
     //for (int i = 0; i < row; i++)
@@ -277,12 +285,13 @@ BinaryImg<T> BinaryImg<T>::operator+(T rhs) const
     //    }
     //}
     //return result;
-    return And(rhs);
+    return this->And(src);
+
 }
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::operator*(T rhs) const
+BinaryImg<T> BinaryImg<T>::operator*(T src) const
 {
     //BinaryImg result(row, col);
     //for (int i = 0; i < row; i++)
@@ -293,7 +302,8 @@ BinaryImg<T> BinaryImg<T>::operator*(T rhs) const
     //    }
     //}
     //return result;
-    return Or(rhs);
+    return this->Or(src);
+
 }
 
 
@@ -418,14 +428,14 @@ void BinaryImg<char>::Print()
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::And(T src)
+BinaryImg<T> BinaryImg<T>::And(T src) const
 {
     BinaryImg<T> result(row, col);
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < col; j++)
         {
-            if ((double)array[i][j] * src > numeric_limits<T>::max() || (double)array[i][j] * src < numeric_limits<T>::min())
+            if ((double)array[i][j] * src > std::numeric_limits<T>::max() || (double)array[i][j] * src < std::numeric_limits<T>::min())
             {
                 result.array[i][j] = 0;
             }
@@ -440,14 +450,14 @@ BinaryImg<T> BinaryImg<T>::And(T src)
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::Or(T src)
+BinaryImg<T> BinaryImg<T>::Or(T src) const
 {
     BinaryImg<T> result(row, col);
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < col; j++)
         {
-            if ((double)array[i][j] + src > numeric_limits<T>::max() || (double)array[i][j] + src < numeric_limits<T>::min())
+            if ((double)array[i][j] + src > std::numeric_limits<T>::max() || (double)array[i][j] + src < std::numeric_limits<T>::min())
             {
                 result.array[i][j] = 0;
             }
@@ -462,7 +472,7 @@ BinaryImg<T> BinaryImg<T>::Or(T src)
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::And(BinaryImg<T>& rhs)
+BinaryImg<T> BinaryImg<T>::And(const BinaryImg<T>& rhs) const
 {
     if (row != rhs.row || col != rhs.col) { throw EClassException("Invalid dimensions of imgs"); }
     BinaryImg<T> result(row, col);
@@ -471,7 +481,7 @@ BinaryImg<T> BinaryImg<T>::And(BinaryImg<T>& rhs)
         for (int j = 0; j < col; j++)
         {
 
-            if ((double)array[i][j] * rhs.array[i][j] > numeric_limits<T>::max() || (double)array[i][j] * rhs.array[i][j] < numeric_limits<T>::min())
+            if ((double)array[i][j] * rhs.array[i][j] > std::numeric_limits<T>::max() || (double)array[i][j] * rhs.array[i][j] < std::numeric_limits<T>::min())
             {
                 result.array[i][j] = 0;
             }
@@ -486,7 +496,7 @@ BinaryImg<T> BinaryImg<T>::And(BinaryImg<T>& rhs)
 
 
 template <class T>
-BinaryImg<T> BinaryImg<T>::Or(BinaryImg<T>& rhs)
+BinaryImg<T> BinaryImg<T>::Or(const BinaryImg<T>& rhs) const
 {
     if (row != rhs.row || col != rhs.col) { throw EClassException("Invalid dimensions of imgs"); }
     BinaryImg<T> result(row, col);
@@ -494,7 +504,10 @@ BinaryImg<T> BinaryImg<T>::Or(BinaryImg<T>& rhs)
     {
         for (int j = 0; j < col; j++)
         {
-            if ((double)array[i][j] + rhs.array[i][j] > numeric_limits<T>::max() || (double)array[i][j] + rhs.array[i][j] < numeric_limits<T>::min())
+            double test1 = this->array[i][j];
+            double test2 = rhs.array[i][j];
+
+            if ((double)array[i][j] + rhs.array[i][j] > std::numeric_limits<T>::max() || (double)array[i][j] + rhs.array[i][j] < std::numeric_limits<T>::min())
             {
                 result.array[i][j] = 0;
             }
